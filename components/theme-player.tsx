@@ -89,12 +89,12 @@ export function ThemePlayer({
   }, [playerRef]);
 
   return (
-    <section className="p-4 sm:p-5">
-      <p className="text-center text-sm font-semibold text-foreground uppercase tracking-[0.14em]">
+    <section className="flex items-center justify-between gap-4 p-4 min-[900px]:block sm:p-5">
+      <p className="text-sm font-semibold text-foreground uppercase tracking-[0.14em] min-[900px]:text-center">
         Original theme
       </p>
 
-      <div className="relative mx-auto mt-4 aspect-square w-40 max-w-full overflow-hidden rounded-xl border border-border bg-black shadow-[0_20px_65px_-28px_rgba(34,211,238,0.8)] xl:w-[12.5rem]">
+      <div className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-xl border border-border bg-black shadow-[0_20px_65px_-28px_rgba(34,211,238,0.8)] min-[900px]:mx-auto min-[900px]:mt-4 min-[900px]:w-40 xl:w-[12.5rem]">
         <iframe
           ref={iframeRef}
           src={embedUrl}

@@ -7,7 +7,6 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import Image from "next/image";
 import { useRef } from "react";
 import { MissionConsole } from "@/components/mission-console";
 import { Button } from "@/components/ui/button";
@@ -42,13 +41,13 @@ export function Hero() {
             className="absolute -inset-[8%]"
             style={{ y: reducedMotion ? 0 : backgroundY }}
           >
-            <Image
+            <img
               src="/hero.avif"
+              srcSet="/hero-sm.avif 1280w, /hero.avif 2560w"
+              sizes="116vw"
               alt="K.I.T.T. driving away down a desert highway into a neon dusk"
-              fill
-              loading="eager"
-              sizes="100vw"
-              className="object-cover object-[58%_center]"
+              fetchPriority="high"
+              className="absolute inset-0 size-full object-cover object-[58%_center]"
             />
           </motion.div>
 

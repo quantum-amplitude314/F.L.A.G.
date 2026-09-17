@@ -12,32 +12,104 @@ import { cn } from "@/lib/utils";
 const slides = [
   {
     src: "/console-driver.avif",
+    srcSm: "/console-driver-sm.avif",
+    width: 1152,
     alt: "A shadowy field operative running past a black car on a neon-lit street",
     title: "A man who does not exist",
     detail: "A new identity. A purpose that endures.",
   },
   {
     src: "/console-mechanic.avif",
+    srcSm: "/console-mechanic-sm.avif",
+    width: 1152,
     alt: "A mechanic silhouetted beside a black car with its hood open in a neon-lit garage",
     title: "The mind behind the machine",
     detail: "Keeping both partners alive in the field.",
   },
   {
     src: "/console-kitt.avif",
+    srcSm: "/console-kitt-sm.avif",
+    width: 1216,
     alt: "A black sports car in profile as a flat silhouette against horizontal magenta neon bands and two vertical cyan tubes",
     title: "Intelligence and force",
     detail: "The Knight Industries Two Thousand. Always listening.",
   },
   {
     src: "/console-devon.avif",
+    srcSm: "/console-devon-sm.avif",
+    width: 1216,
     alt: "A silhouetted man at a desk holding a corded telephone receiver, neon bands glowing behind him",
     title: "The voice of the Foundation",
     detail: "The conscience behind the mission.",
   },
 ] as const;
 
+type Slide = (typeof slides)[number];
+
 const controlButtonClassName =
   "rounded-full border-white/20 bg-black/40 text-white backdrop-blur hover:bg-black/70";
+
+function SlideCaption({
+  slide: { title, detail },
+  className,
+}: {
+  slide: Slide;
+  className?: string;
+}) {
+  return (
+    <div className={className}>
+      <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-4xl">
+        {title}
+      </h2>
+      <p className="mt-2 text-base text-white/65">{detail}</p>
+    </div>
+  );
+}
+
+function SlideControls({
+  autoAdvance,
+  onToggle,
+  onPrevious,
+  onNext,
+}: {
+  autoAdvance: boolean;
+  onToggle: () => void;
+  onPrevious: () => void;
+  onNext: () => void;
+}) {
+  return (
+    <div className="flex shrink-0 gap-2">
+      <Button
+        variant="outline"
+        size="icon-lg"
+        onClick={onToggle}
+        aria-label={autoAdvance ? "Pause slideshow" : "Play slideshow"}
+        aria-pressed={autoAdvance}
+        className={controlButtonClassName}
+      >
+        {autoAdvance ? <Pause /> : <Play />}
+      </Button>
+      <Button
+        variant="outline"
+        size="icon-lg"
+        onClick={onPrevious}
+        aria-label="Previous mission slide"
+        className={controlButtonClassName}
+      >
+        <ChevronLeft />
+      </Button>
+      <Button
+        variant="outline"
+        size="icon-lg"
+        onClick={onNext}
+        aria-label="Next mission slide"
+        className={controlButtonClassName}
+      >
+        <ChevronRight />
+      </Button>
+    </div>
+  );
+}
 
 export function MissionConsole() {
   const [index, setIndex] = useState(0);
@@ -101,12 +173,12 @@ export function MissionConsole() {
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-0"
               >
-                <Image
+                <img
                   src={activeSlide.src}
-                  alt={activeSlide.alt}
-                  fill
+                  srcSet={`${activeSlide.srcSm} 768w, ${activeSlide.src} ${activeSlide.width}w`}
                   sizes="(min-width: 1280px) 940px, (min-width: 900px) 70vw, 100vw"
-                  className="object-cover"
+                  alt={activeSlide.alt}
+                  className="absolute inset-0 size-full object-cover"
                 />
               </motion.div>
             </AnimatePresence>
@@ -134,58 +206,35 @@ export function MissionConsole() {
             </AnimatePresence>
             <div
               hidden={!sequenceStarted}
-              className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 p-5 sm:p-8"
+              className="absolute inset-x-0 bottom-0 hidden items-end justify-between gap-5 p-8 min-[900px]:flex"
             >
-              <div className="max-w-xl">
-                <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-4xl">
-                  {activeSlide.title}
-                </h2>
-                <p className="mt-2 hidden text-base text-white/65 sm:block">
-                  {activeSlide.detail}
-                </p>
-              </div>
-              <div className="flex shrink-0 gap-2">
-                {sequenceStarted ? (
-                  <Button
-                    variant="outline"
-                    size="icon-lg"
-                    onClick={toggleSequence}
-                    aria-label={
-                      autoAdvance ? "Pause slideshow" : "Play slideshow"
-                    }
-                    aria-pressed={autoAdvance}
-                    className={controlButtonClassName}
-                  >
-                    {autoAdvance ? <Pause /> : <Play />}
-                  </Button>
-                ) : null}
-                <Button
-                  variant="outline"
-                  size="icon-lg"
-                  onClick={() => select(index - 1)}
-                  aria-label="Previous mission slide"
-                  className={controlButtonClassName}
-                >
-                  <ChevronLeft />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon-lg"
-                  onClick={() => select(index + 1)}
-                  aria-label="Next mission slide"
-                  className={controlButtonClassName}
-                >
-                  <ChevronRight />
-                </Button>
-              </div>
+              <SlideCaption slide={activeSlide} className="max-w-xl" />
+              <SlideControls
+                autoAdvance={autoAdvance}
+                onToggle={toggleSequence}
+                onPrevious={() => select(index - 1)}
+                onNext={() => select(index + 1)}
+              />
             </div>
+          </div>
+          <div
+            hidden={!sequenceStarted}
+            className="flex flex-col gap-4 border-t border-border p-5 min-[900px]:hidden"
+          >
+            <SlideCaption slide={activeSlide} />
+            <SlideControls
+              autoAdvance={autoAdvance}
+              onToggle={toggleSequence}
+              onPrevious={() => select(index - 1)}
+              onNext={() => select(index + 1)}
+            />
           </div>
         </div>
 
         <aside className="flex min-w-0 flex-col bg-background/35">
           <nav
             aria-label="Mission Console scenes"
-            className="grid auto-cols-fr grid-flow-col gap-px bg-border min-[900px]:grid-flow-row min-[900px]:grid-cols-1"
+            className="hidden grid-cols-1 gap-px bg-border min-[900px]:grid"
           >
             {slides.map((slide, slideIndex) => (
               <button
@@ -194,16 +243,16 @@ export function MissionConsole() {
                 onClick={() => select(slideIndex)}
                 aria-current={slideIndex === index ? "true" : undefined}
                 className={cn(
-                  "group flex min-w-0 flex-col gap-2 bg-background/90 p-3 text-left outline-none transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring min-[900px]:flex-row min-[900px]:items-center min-[900px]:gap-3 min-[900px]:p-4",
+                  "group flex min-w-0 items-center gap-3 bg-background/90 p-4 text-left outline-none transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring",
                   slideIndex === index ? "bg-primary/10" : "hover:bg-muted/70",
                 )}
               >
-                <span className="relative block aspect-video w-full shrink-0 overflow-hidden rounded-lg bg-black min-[900px]:w-20">
+                <span className="relative block aspect-video w-20 shrink-0 overflow-hidden rounded-lg bg-black">
                   <Image
                     src={slide.src}
                     alt=""
                     fill
-                    sizes={`(min-width: 900px) 80px, ${100 / slides.length}vw`}
+                    sizes="80px"
                     className={cn(
                       "object-cover transition duration-300",
                       slideIndex === index
