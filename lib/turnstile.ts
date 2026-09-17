@@ -1,6 +1,8 @@
 import "server-only";
 
-const secretKey = process.env.TURNSTILE_SECRET_KEY;
+import { env } from "@/lib/env";
+
+const { TURNSTILE_SECRET_KEY: secretKey } = env;
 const verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const verifyTimeoutMs = 5_000;
 

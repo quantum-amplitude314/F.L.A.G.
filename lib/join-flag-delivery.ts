@@ -1,12 +1,9 @@
 import "server-only";
 
 import { Resend } from "resend";
+import { env } from "@/lib/env";
 import type { JoinFlagRequest } from "@/lib/join-flag";
 
-const resendApiKey = process.env.RESEND_API_KEY;
-const recipient = process.env.JOIN_FLAG_RECIPIENT;
-const sender =
-  process.env.JOIN_FLAG_SENDER ?? "F.L.A.G. <onboarding@resend.dev>";
 const deliveryTimeoutMs = 5_000;
 
 const sendWithTimeout = async <T>(send: Promise<T>) => {
@@ -30,7 +27,12 @@ export const deliverJoinFlagRequest = async ({
   email,
   message,
 }: JoinFlagRequest) => {
-  if (!resendApiKey || !recipient) {
+  const {
+    RESEND_API_KEY: apiKey,
+    JOIN_FLAG_RECIPIENT: recipient,
+    JOIN_FLAG_SENDER: sender,
+  } = env;
+  if (!apiKey || !recipient) {
     console.debug("[join-flag] delivery not configured", {
       name,
       email,
@@ -40,7 +42,7 @@ export const deliverJoinFlagRequest = async ({
     return;
   }
 
-  const resend = new Resend(resendApiKey);
+  const resend = new Resend(apiKey);
   const { error } = await sendWithTimeout(
     resend.emails.send({
       from: sender,
