@@ -15,7 +15,7 @@ export function Foundation() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,oklch(0.57_0.22_22/0.09),transparent_30rem),radial-gradient(circle_at_12%_58%,oklch(0.62_0.24_330/0.11),transparent_32rem),radial-gradient(circle_at_88%_68%,oklch(0.75_0.15_210/0.09),transparent_30rem)]" />
       <div className="absolute inset-0 opacity-[0.05] [background-image:linear-gradient(oklch(0.79_0.15_207)_1px,transparent_1px),linear-gradient(90deg,oklch(0.79_0.15_207)_1px,transparent_1px)] [background-size:4rem_4rem]" />
 
-      <div className="relative mx-auto max-w-[120rem] px-6 py-24 sm:py-28 lg:px-10 lg:py-32 2xl:px-16">
+      <div className="relative mx-auto max-w-[120rem] px-6 py-16 lg:px-10 2xl:px-16">
         <header className="mx-auto max-w-6xl text-center">
           <h2
             id="foundation-title"
@@ -31,7 +31,7 @@ export function Foundation() {
           </blockquote>
         </header>
 
-        <div className="mx-auto mt-16 grid max-w-[96rem] gap-8 xl:grid-cols-2 2xl:gap-10">
+        <div className="mx-auto mt-16 grid max-w-[96rem] items-start gap-8 xl:grid-cols-2 2xl:gap-10">
           {foundationProfiles.map((profile) => {
             const { id } = profile;
 
