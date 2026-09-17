@@ -138,7 +138,12 @@
         oklch(0.7 0.15 210 / 8%),
         transparent 32rem
       );
-    background-attachment: fixed;
+  }
+  /* Mobile performances optimization */
+  @media (hover: hover) and (pointer: fine) {
+    body {
+      background-attachment: fixed;
+    }
   }
   html {
     @apply font-sans;
