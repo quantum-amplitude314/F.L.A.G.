@@ -4,8 +4,6 @@ const secretKey = process.env.TURNSTILE_SECRET_KEY;
 const verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const verifyTimeoutMs = 5_000;
 
-export const turnstileResponseField = "cf-turnstile-response";
-
 export const isTurnstileConfigured = () => Boolean(secretKey);
 
 export const verifyTurnstileToken = async (token: string) => {
