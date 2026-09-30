@@ -1,26 +1,7 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
-import type { Env } from "@/lib/env";
+import { beforeEach, describe, expect, test } from "bun:test";
+import { mockServerModules, sentEmail, testEnv } from "@/test/server-mocks";
 
-type SendResult = {
-  data: { id: string } | null;
-  error: { message: string; name: string } | null;
-};
-
-const envMock: Env = {
-  RESEND_API_KEY: "re_test",
-  JOIN_FLAG_RECIPIENT: "devon@flag.example",
-  JOIN_FLAG_SENDER: "F.L.A.G. <flag@flag.example>",
-  TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
-};
-const sendMock = mock<(input: unknown) => Promise<SendResult>>();
-
-mock.module("server-only", () => ({}));
-mock.module("./env", () => ({ env: envMock }));
-mock.module("resend", () => ({
-  Resend: class {
-    emails = { send: sendMock };
-  },
-}));
+const { sendMock } = mockServerModules();
 
 const { deliverJoinFlagRequest } = await import("@/lib/join-flag-delivery");
 
@@ -32,7 +13,7 @@ const request = {
 
 beforeEach(() => {
   sendMock.mockReset();
-  sendMock.mockResolvedValue({ data: { id: "email_1" }, error: null });
+  sendMock.mockResolvedValue(sentEmail);
 });
 
 describe("deliverJoinFlagRequest", () => {
@@ -41,8 +22,8 @@ describe("deliverJoinFlagRequest", () => {
 
     expect(sendMock).toHaveBeenCalledTimes(1);
     expect(sendMock).toHaveBeenCalledWith({
-      from: "F.L.A.G. <flag@flag.example>",
-      to: "devon@flag.example",
+      from: testEnv.JOIN_FLAG_SENDER,
+      to: testEnv.JOIN_FLAG_RECIPIENT,
       replyTo: request.email,
       subject: `Join F.L.A.G. form: ${request.name}`,
       text: `${request.name} <${request.email}>\n\n${request.message}`,
