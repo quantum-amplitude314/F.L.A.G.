@@ -7,9 +7,19 @@ import {
 } from "@/lib/join-flag";
 import { joinFlagCopy } from "@/lib/join-flag-copy";
 import { deliverJoinFlagRequest } from "@/lib/join-flag-delivery";
-import { verifyTurnstileToken } from "@/lib/turnstile";
+import { turnstileTokenSchema, verifyTurnstileToken } from "@/lib/turnstile";
 
 const { verification } = joinFlagCopy;
+
+const verificationRequired: JoinFlagState = {
+  status: "invalid",
+  errors: { verification: verification.required },
+};
+const verificationFailed: JoinFlagState = {
+  status: "invalid",
+  errors: { verification: verification.failed },
+};
+const deliveryFailed: JoinFlagState = { status: "failed" };
 
 export const submitJoinFlag = async ({
   values,
@@ -19,35 +29,33 @@ export const submitJoinFlag = async ({
   token: string | null;
 }): Promise<JoinFlagState> => {
   const parsed = parseJoinFlag(values);
-  if (!parsed.success) return { status: "invalid", errors: parsed.errors };
+  if (!parsed.success) {
+    const invalid: JoinFlagState = { status: "invalid", errors: parsed.errors };
 
-  if (!token) {
-    return {
-      status: "invalid",
-      errors: { verification: verification.required },
-    };
+    return invalid;
   }
+  const { data: request } = parsed;
 
-  const verified = await verifyTurnstileToken(token).catch((error) => {
-    console.error("[join-flag] verification failed", error);
+  const parsedToken = turnstileTokenSchema.safeParse(token);
+  if (!parsedToken.success) return verificationRequired;
 
-    return false;
-  });
+  const verified = await verifyTurnstileToken(parsedToken.data).catch(
+    (error) => {
+      console.error("[join-flag] verification failed", error);
 
-  if (!verified) {
-    return {
-      status: "invalid",
-      errors: { verification: verification.failed },
-    };
-  }
+      return false;
+    },
+  );
+  if (!verified) return verificationFailed;
 
   try {
-    await deliverJoinFlagRequest(parsed.data);
+    await deliverJoinFlagRequest(request);
   } catch (error) {
     console.error("[join-flag] delivery failed", error);
 
-    return { status: "failed" };
+    return deliveryFailed;
   }
+  const sent: JoinFlagState = { status: "sent", name: request.name };
 
-  return { status: "sent", name: parsed.data.name };
+  return sent;
 };

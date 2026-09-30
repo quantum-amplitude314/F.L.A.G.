@@ -44,15 +44,26 @@ export const initialJoinFlagState: JoinFlagState = { status: "idle" };
 
 /** Same check on both sides: the client skips the round-trip, the server never trusts the client. */
 export const parseJoinFlag = (values: JoinFlagValues) => {
-  const parsed = joinFlagSchema.safeParse(values);
-  if (parsed.success) return { success: true as const, data: parsed.data };
+  const { success, data, error } = joinFlagSchema.safeParse(values);
+  if (success) {
+    const valid = { success, data };
 
-  const { fieldErrors } = z.flattenError(parsed.error);
+    return valid;
+  }
+
+  const {
+    fieldErrors: {
+      name: [nameError] = [],
+      email: [emailError] = [],
+      message: [messageError] = [],
+    },
+  } = z.flattenError(error);
   const errors: JoinFlagErrors = {
-    name: fieldErrors.name?.[0],
-    email: fieldErrors.email?.[0],
-    message: fieldErrors.message?.[0],
+    name: nameError,
+    email: emailError,
+    message: messageError,
   };
+  const invalid = { success, errors };
 
-  return { success: false as const, errors };
+  return invalid;
 };
