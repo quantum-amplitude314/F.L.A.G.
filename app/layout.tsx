@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import "@/lib/env";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,7 +14,6 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  // No metadataBase: Next resolves images against VERCEL_PROJECT_PRODUCTION_URL (preview URL on previews, localhost in dev).
   title: "F.L.A.G.",
   description:
     "A shadowy flight into the dangerous world of a man who does not exist — a fan-made concept page.",

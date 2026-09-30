@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef } from "react";
+import { publicEnv } from "@/lib/public-env";
 
 /** Explicit-render API of https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit */
 type TurnstileApi = {
@@ -28,8 +29,7 @@ declare global {
 export const turnstileScriptUrl =
   "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
-/** Unset in local dev without keys: the widget is not rendered and the server skips the check. */
-export const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+const { NEXT_PUBLIC_TURNSTILE_SITE_KEY: siteKey } = publicEnv;
 
 export const useTurnstile = ({
   onToken,
@@ -55,12 +55,10 @@ export const useTurnstile = ({
   const mount = useCallback(() => {
     const container = containerRef.current;
     const turnstile = window.turnstile;
-    if (!container || !turnstile || !turnstileSiteKey || widgetIdRef.current) {
-      return;
-    }
+    if (!container || !turnstile || widgetIdRef.current) return;
 
     widgetIdRef.current = turnstile.render(container, {
-      sitekey: turnstileSiteKey,
+      sitekey: siteKey,
       theme: "dark",
       size: "flexible",
       callback: onToken,

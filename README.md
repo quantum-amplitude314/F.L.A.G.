@@ -17,12 +17,14 @@ bun run build
 
 ## Environment
 
-Copy `.env.example` to `.env.local` for `next dev`. Without `RESEND_API_KEY` and `JOIN_FLAG_RECIPIENT`, Join F.L.A.G. submissions are logged with `console.debug`.
+Copy `.env.example` to `.env.local` for `next dev`. Every variable is required except `JOIN_FLAG_SENDER`; Zod parses them in `lib/env.ts` (server) and `lib/public-env.ts` (browser), and a missing or invalid one fails the build.
 
 | Variable | Purpose |
 | --- | --- |
 | `RESEND_API_KEY` | Resend API key (server-only) |
 | `JOIN_FLAG_RECIPIENT` | Inbox that receives Join F.L.A.G. requests |
 | `JOIN_FLAG_SENDER` | From address, default `F.L.A.G. <onboarding@resend.dev>` |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key; without it the widget is not rendered |
-| `TURNSTILE_SECRET_KEY` | Turnstile secret key (server-only); without it tokens are not checked |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key, inlined into the browser bundle at build |
+| `TURNSTILE_SECRET_KEY` | Turnstile secret key (server-only) |
+
+`.env.example` has the Turnstile test keys, which work on localhost.

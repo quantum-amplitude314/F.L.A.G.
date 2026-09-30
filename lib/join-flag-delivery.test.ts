@@ -7,10 +7,10 @@ type SendResult = {
 };
 
 const envMock: Env = {
-  RESEND_API_KEY: undefined,
-  JOIN_FLAG_RECIPIENT: undefined,
+  RESEND_API_KEY: "re_test",
+  JOIN_FLAG_RECIPIENT: "devon@flag.example",
   JOIN_FLAG_SENDER: "F.L.A.G. <flag@flag.example>",
-  TURNSTILE_SECRET_KEY: undefined,
+  TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
 };
 const sendMock = mock<(input: unknown) => Promise<SendResult>>();
 
@@ -30,28 +30,13 @@ const request = {
   message: "One man can make a difference.",
 };
 
-const configureDelivery = () => {
-  envMock.RESEND_API_KEY = "re_test";
-  envMock.JOIN_FLAG_RECIPIENT = "devon@flag.example";
-};
-
 beforeEach(() => {
-  envMock.RESEND_API_KEY = undefined;
-  envMock.JOIN_FLAG_RECIPIENT = undefined;
   sendMock.mockReset();
   sendMock.mockResolvedValue({ data: { id: "email_1" }, error: null });
 });
 
 describe("deliverJoinFlagRequest", () => {
-  test("skips delivery when Resend is not configured", async () => {
-    await deliverJoinFlagRequest(request);
-
-    expect(sendMock).not.toHaveBeenCalled();
-  });
-
   test("sends the request to the recipient with the visitor as reply-to", async () => {
-    configureDelivery();
-
     await deliverJoinFlagRequest(request);
 
     expect(sendMock).toHaveBeenCalledTimes(1);
@@ -65,7 +50,6 @@ describe("deliverJoinFlagRequest", () => {
   });
 
   test("rejects when Resend reports an error", async () => {
-    configureDelivery();
     sendMock.mockResolvedValue({
       data: null,
       error: { message: "Invalid API key", name: "validation_error" },

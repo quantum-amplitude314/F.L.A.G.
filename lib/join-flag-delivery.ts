@@ -32,16 +32,6 @@ export const deliverJoinFlagRequest = async ({
     JOIN_FLAG_RECIPIENT: recipient,
     JOIN_FLAG_SENDER: sender,
   } = env;
-  if (!apiKey || !recipient) {
-    console.debug("[join-flag] delivery not configured", {
-      name,
-      email,
-      message,
-    });
-
-    return;
-  }
-
   const resend = new Resend(apiKey);
   const { error } = await sendWithTimeout(
     resend.emails.send({

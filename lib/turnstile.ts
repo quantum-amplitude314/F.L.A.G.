@@ -6,11 +6,7 @@ const { TURNSTILE_SECRET_KEY: secretKey } = env;
 const verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const verifyTimeoutMs = 5_000;
 
-export const isTurnstileConfigured = () => Boolean(secretKey);
-
 export const verifyTurnstileToken = async (token: string) => {
-  if (!secretKey) return true;
-
   const response = await fetch(verifyUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },

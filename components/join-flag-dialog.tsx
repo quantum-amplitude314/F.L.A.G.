@@ -23,11 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  turnstileScriptUrl,
-  turnstileSiteKey,
-  useTurnstile,
-} from "@/hooks/use-turnstile";
+import { turnstileScriptUrl, useTurnstile } from "@/hooks/use-turnstile";
 import {
   initialJoinFlagState,
   type JoinFlagField,
@@ -195,17 +191,15 @@ function JoinFlagForm() {
         onInput={() => clearError("message")}
         multiline
       />
-      {turnstileSiteKey ? (
-        <div className="grid gap-2">
-          <div ref={challengeRef} className="min-h-16" />
-          <Script src={turnstileScriptUrl} onReady={mountChallenge} />
-          {errors?.verification ? (
-            <p role="alert" className="text-xs text-destructive">
-              {errors.verification}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+      <div className="grid gap-2">
+        <div ref={challengeRef} className="min-h-16" />
+        <Script src={turnstileScriptUrl} onReady={mountChallenge} />
+        {errors?.verification ? (
+          <p role="alert" className="text-xs text-destructive">
+            {errors.verification}
+          </p>
+        ) : null}
+      </div>
       {state.status === "failed" ? (
         <p role="alert" className="text-xs text-destructive">
           {failed}
@@ -213,7 +207,7 @@ function JoinFlagForm() {
       ) : null}
       <Button
         type="submit"
-        disabled={pending || (turnstileSiteKey ? !token : false)}
+        disabled={pending || !token}
         className="h-13 rounded-full font-mono text-base uppercase tracking-[0.14em] shadow-[0_0_30px_-10px_var(--primary)]"
       >
         <Send />
