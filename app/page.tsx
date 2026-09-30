@@ -1,4 +1,5 @@
 import { Navigation } from "@/components/navigation";
+import { QaCredit } from "@/components/qa-credit";
 import { Foundation } from "@/components/sections/foundation";
 import { Hero } from "@/components/sections/hero";
 
@@ -13,7 +14,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 pt-10 text-center sm:flex-row sm:justify-between sm:text-left">
           <div className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">
             Knight Industries Two Thousand
           </div>
@@ -22,6 +23,9 @@ export default function Home() {
             respective rights holders.
           </p>
         </div>
+        <p className="px-6 pt-6 pb-10 text-center text-sm text-muted-foreground">
+          <QaCredit />
+        </p>
       </footer>
     </>
   );

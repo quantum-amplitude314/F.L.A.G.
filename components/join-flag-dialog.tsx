@@ -145,9 +145,12 @@ function JoinFlagForm() {
     };
     const parsed = parseJoinFlag(values);
     if (!parsed.success) {
-      const [firstInvalid] = Object.keys(parsed.errors) as JoinFlagField[];
-      setState({ status: "invalid", errors: parsed.errors });
-      controls.current[firstInvalid]?.focus();
+      const { errors } = parsed;
+      const firstInvalid = (Object.keys(errors) as JoinFlagField[]).find(
+        (field) => errors[field],
+      );
+      setState({ status: "invalid", errors });
+      if (firstInvalid) controls.current[firstInvalid]?.focus();
 
       return;
     }

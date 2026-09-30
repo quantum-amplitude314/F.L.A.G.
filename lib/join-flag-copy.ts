@@ -2,7 +2,7 @@ export const joinFlagLimits = {
   nameMin: 2,
   nameMax: 80,
   emailMax: 254,
-  messageMin: 12,
+  messageMin: 4,
   messageMax: 1200,
 } as const;
 
