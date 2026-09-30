@@ -89,10 +89,7 @@ export function CharacterDossier({ profile }: CharacterDossierProps) {
 
       <dl aria-label={`${name} traits`} className="grid sm:grid-cols-3">
         {traits.map(({ icon: Icon, label, detail }) => (
-          <div
-            key={label}
-            className="flex items-center gap-3 px-5 py-3"
-          >
+          <div key={label} className="flex items-center gap-3 px-5 py-3">
             <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-primary/25 bg-primary/8 text-primary">
               <Icon className="size-4" aria-hidden="true" />
             </span>
