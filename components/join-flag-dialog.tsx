@@ -53,18 +53,25 @@ const readErrors = (state: JoinFlagState) =>
 function JoinFlagFormField({
   field,
   error,
+  hint,
   controls,
   onInput,
   multiline = false,
 }: {
   field: JoinFlagField;
   error?: string;
+  hint?: string;
   controls: React.RefObject<FieldControls>;
   onInput: () => void;
   multiline?: boolean;
 }) {
   const id = useId();
   const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
+  const descriptionId =
+    [hint ? hintId : undefined, error ? errorId : undefined]
+      .filter(Boolean)
+      .join(" ") || undefined;
   const attach = (node: FieldControl | null) => {
     controls.current[field] = node;
   };
@@ -76,7 +83,7 @@ function JoinFlagFormField({
       rows={7}
       className="max-h-[32vh] min-h-44 text-base"
       aria-invalid={error ? true : undefined}
-      aria-describedby={error ? errorId : undefined}
+      aria-describedby={descriptionId}
       onInput={onInput}
     />
   ) : (
@@ -88,7 +95,7 @@ function JoinFlagFormField({
       autoComplete={field}
       className="h-13 px-4 text-base"
       aria-invalid={error ? true : undefined}
-      aria-describedby={error ? errorId : undefined}
+      aria-describedby={descriptionId}
       onInput={onInput}
     />
   );
@@ -102,6 +109,11 @@ function JoinFlagFormField({
         {fields[field].label}
       </Label>
       {control}
+      {hint ? (
+        <p id={hintId} className="text-xs text-muted-foreground">
+          {hint}
+        </p>
+      ) : null}
       {error ? (
         <p id={errorId} className="text-xs text-destructive">
           {error}
@@ -191,6 +203,7 @@ function JoinFlagForm() {
         field="message"
         controls={controls}
         error={errors?.message}
+        hint={fields.message.hint}
         onInput={() => clearError("message")}
         multiline
       />

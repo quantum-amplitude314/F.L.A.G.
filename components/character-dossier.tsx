@@ -47,7 +47,7 @@ export function CharacterDossier({ profile }: CharacterDossierProps) {
       className="flex flex-col overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_24px_60px_-45px_oklch(0.79_0.15_207/0.45)]"
     >
       <div className="grid sm:grid-cols-[minmax(0,1fr)_minmax(0,260px)]">
-        <div className="flex flex-col pt-[1.125rem] pb-2.5 pl-4">
+        <div className="flex flex-col px-5 pt-[1.125rem] pb-2.5">
           <div className="relative z-10 -mt-16 size-20 overflow-hidden rounded-full border border-primary/40 bg-muted shadow-[0_0_30px_-9px_var(--primary)] sm:mt-0 2xl:size-24">
             <Image
               src={avatar}

@@ -25,6 +25,7 @@ export const joinFlagCopy = {
     },
     message: {
       label: "Your message",
+      hint: `Up to ${joinFlagLimits.messageMax.toLocaleString("en-US")} characters.`,
       required: "Tell us why you are calling.",
       tooShort: `Tell us a little more — at least ${joinFlagLimits.messageMin} characters.`,
       tooLong: `Keep it under ${joinFlagLimits.messageMax} characters.`,
