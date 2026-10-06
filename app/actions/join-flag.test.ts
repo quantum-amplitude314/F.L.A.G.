@@ -1,12 +1,4 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  mock,
-  spyOn,
-  test,
-} from "bun:test";
+import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 import type { JoinFlagState } from "@/lib/join-flag";
 import { joinFlagCopy } from "@/lib/join-flag-copy";
 import { mockServerModules, sentEmail } from "@/test/server-mocks";

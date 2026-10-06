@@ -128,16 +128,8 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      radial-gradient(
-        circle at 15% 8%,
-        oklch(0.54 0.2 320 / 10%),
-        transparent 28rem
-      ),
-      radial-gradient(
-        circle at 88% 24%,
-        oklch(0.7 0.15 210 / 8%),
-        transparent 32rem
-      );
+      radial-gradient(circle at 15% 8%, oklch(0.54 0.2 320 / 10%), transparent 28rem),
+      radial-gradient(circle at 88% 24%, oklch(0.7 0.15 210 / 8%), transparent 32rem);
   }
   /* Mobile performances optimization */
   @media (hover: hover) and (pointer: fine) {

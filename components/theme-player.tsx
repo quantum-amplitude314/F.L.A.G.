@@ -31,15 +31,11 @@ declare global {
         },
       ) => YouTubePlayer;
     };
-    onYouTubeIframeAPIReady?: () => void;
+    onYouTubeIframeAPIReady?: (() => void) | undefined;
   }
 }
 
-export function ThemePlayer({
-  playerRef,
-}: {
-  playerRef: RefObject<YouTubePlayer | null>;
-}) {
+export function ThemePlayer({ playerRef }: { playerRef: RefObject<YouTubePlayer | null> }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {

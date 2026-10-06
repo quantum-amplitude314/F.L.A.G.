@@ -2,14 +2,7 @@
 
 import { Radio, Send } from "lucide-react";
 import Script from "next/script";
-import {
-  type FormEvent,
-  useCallback,
-  useId,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import { type FormEvent, useCallback, useId, useRef, useState, useTransition } from "react";
 import { submitJoinFlag } from "@/app/actions/join-flag";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,16 +25,7 @@ import {
 } from "@/lib/join-flag";
 import { joinFlagCopy } from "@/lib/join-flag-copy";
 
-const {
-  fields,
-  trigger,
-  title,
-  description,
-  submit,
-  submitting,
-  failed,
-  sent,
-} = joinFlagCopy;
+const { fields, trigger, title, description, submit, submitting, failed, sent } = joinFlagCopy;
 
 type FieldControl = HTMLInputElement | HTMLTextAreaElement;
 
@@ -59,8 +43,8 @@ function JoinFlagFormField({
   multiline = false,
 }: {
   field: JoinFlagField;
-  error?: string;
-  hint?: string;
+  error?: string | undefined;
+  hint?: string | undefined;
   controls: React.RefObject<FieldControls>;
   onInput: () => void;
   multiline?: boolean;
@@ -69,9 +53,7 @@ function JoinFlagFormField({
   const errorId = `${id}-error`;
   const hintId = `${id}-hint`;
   const descriptionId =
-    [hint ? hintId : undefined, error ? errorId : undefined]
-      .filter(Boolean)
-      .join(" ") || undefined;
+    [hint ? hintId : undefined, error ? errorId : undefined].filter(Boolean).join(" ") || undefined;
   const attach = (node: FieldControl | null) => {
     controls.current[field] = node;
   };
@@ -158,9 +140,7 @@ function JoinFlagForm() {
     const parsed = parseJoinFlag(values);
     if (!parsed.success) {
       const { errors } = parsed;
-      const firstInvalid = (Object.keys(errors) as JoinFlagField[]).find(
-        (field) => errors[field],
-      );
+      const firstInvalid = (Object.keys(errors) as JoinFlagField[]).find((field) => errors[field]);
       setState({ status: "invalid", errors });
       if (firstInvalid) controls.current[firstInvalid]?.focus();
 
@@ -252,9 +232,7 @@ export function JoinFlagDialog() {
           <DialogTitle className="text-xl font-semibold tracking-[-0.02em] sm:text-2xl">
             {title}
           </DialogTitle>
-          <DialogDescription className="text-base leading-7">
-            {description}
-          </DialogDescription>
+          <DialogDescription className="text-base leading-7">{description}</DialogDescription>
         </DialogHeader>
         <JoinFlagForm />
       </DialogContent>

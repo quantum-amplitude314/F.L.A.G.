@@ -9,8 +9,7 @@ export const joinFlagLimits = {
 export const joinFlagCopy = {
   trigger: "Join F.L.A.G.",
   title: "Join F.L.A.G.",
-  description:
-    "The Foundation is always looking for a man who can make a difference.",
+  description: "The Foundation is always looking for a man who can make a difference.",
   fields: {
     name: {
       label: "Name",
@@ -38,6 +37,5 @@ export const joinFlagCopy = {
   submit: "Transmit",
   submitting: "Transmitting…",
   failed: "Transmission failed. Try again in a moment.",
-  sent: (name: string) =>
-    `Transmission received, ${name}. Devon will be in touch.`,
+  sent: (name: string) => `Transmission received, ${name}. Devon will be in touch.`,
 } as const;

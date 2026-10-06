@@ -19,8 +19,8 @@ export default function Home() {
             Knight Industries Two Thousand
           </div>
           <p className="text-sm text-muted-foreground">
-            A fan-made concept page. Knight Rider and K.I.T.T. belong to their
-            respective rights holders.
+            A fan-made concept page. Knight Rider and K.I.T.T. belong to their respective rights
+            holders.
           </p>
         </div>
         <p className="px-6 pt-6 pb-10 text-center text-sm text-muted-foreground">

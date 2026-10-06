@@ -320,11 +320,7 @@ function createShader(gl: WebGLRenderingContext, type: number, source: string) {
 
 function createProgram(gl: WebGLRenderingContext) {
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER_SOURCE);
-  const fragmentShader = createShader(
-    gl,
-    gl.FRAGMENT_SHADER,
-    FRAGMENT_SHADER_SOURCE,
-  );
+  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER_SOURCE);
 
   if (!vertexShader || !fragmentShader) {
     return null;
@@ -352,18 +348,12 @@ function createProgram(gl: WebGLRenderingContext) {
   return null;
 }
 
-function getProgramInfo(
-  gl: WebGLRenderingContext,
-  program: WebGLProgram,
-): ProgramInfo | null {
+function getProgramInfo(gl: WebGLRenderingContext, program: WebGLProgram): ProgramInfo | null {
   const attributeLocation = gl.getAttribLocation(program, "a_position");
   const angle = gl.getUniformLocation(program, "u_angle");
   const cellSize = gl.getUniformLocation(program, "u_cell_size");
   const containerSize = gl.getUniformLocation(program, "u_container_size");
-  const devicePixelRatio = gl.getUniformLocation(
-    program,
-    "u_device_pixel_ratio",
-  );
+  const devicePixelRatio = gl.getUniformLocation(program, "u_device_pixel_ratio");
   const lineColor = gl.getUniformLocation(program, "u_line_color");
   const time = gl.getUniformLocation(program, "u_time");
   const viewportSize = gl.getUniformLocation(program, "u_viewport_size");
@@ -444,20 +434,12 @@ function resolveLineColor(color: string, element: HTMLElement) {
   context.clearRect(0, 0, 1, 1);
   context.fillStyle = resolvedColor;
   context.fillRect(0, 0, 1, 1);
-  const pixel = context.getImageData(0, 0, 1, 1).data;
+  const [red = 0, green = 0, blue = 0, alpha = 255] = context.getImageData(0, 0, 1, 1).data;
 
-  return new Float32Array([
-    pixel[0] / 255,
-    pixel[1] / 255,
-    pixel[2] / 255,
-    pixel[3] / 255,
-  ]);
+  return new Float32Array([red / 255, green / 255, blue / 255, alpha / 255]);
 }
 
-function createFallbackGridStyle(
-  cellSize: number,
-  lineColor: string,
-): CSSProperties {
+function createFallbackGridStyle(cellSize: number, lineColor: string): CSSProperties {
   return {
     animation: `${FALLBACK_ANIMATION_NAME} ${ANIMATION_DURATION_SECONDS}s linear infinite`,
     backgroundImage: `linear-gradient(to right, ${lineColor} 1px, transparent 0), linear-gradient(to bottom, ${lineColor} 1px, transparent 0)`,
@@ -609,10 +591,7 @@ export function RetroGrid({
         return;
       }
 
-      currentDevicePixelRatio = Math.min(
-        window.devicePixelRatio || 1,
-        MAX_DEVICE_PIXEL_RATIO,
-      );
+      currentDevicePixelRatio = Math.min(window.devicePixelRatio || 1, MAX_DEVICE_PIXEL_RATIO);
 
       canvas.width = Math.floor(currentWidth * currentDevicePixelRatio);
       canvas.height = Math.floor(currentHeight * currentDevicePixelRatio);
@@ -636,43 +615,16 @@ export function RetroGrid({
       gl.useProgram(programInfo.program);
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.enableVertexAttribArray(programInfo.attributeLocation);
-      gl.vertexAttribPointer(
-        programInfo.attributeLocation,
-        2,
-        gl.FLOAT,
-        false,
-        0,
-        0,
-      );
+      gl.vertexAttribPointer(programInfo.attributeLocation, 2, gl.FLOAT, false, 0, 0);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(
-        programInfo.uniforms.angle,
-        clamp(angleRef.current, MIN_ANGLE, MAX_ANGLE),
-      );
-      gl.uniform1f(
-        programInfo.uniforms.cellSize,
-        Math.max(cellSizeRef.current, 1),
-      );
-      gl.uniform2f(
-        programInfo.uniforms.containerSize,
-        currentWidth,
-        currentHeight,
-      );
-      gl.uniform1f(
-        programInfo.uniforms.devicePixelRatio,
-        currentDevicePixelRatio,
-      );
+      gl.uniform1f(programInfo.uniforms.angle, clamp(angleRef.current, MIN_ANGLE, MAX_ANGLE));
+      gl.uniform1f(programInfo.uniforms.cellSize, Math.max(cellSizeRef.current, 1));
+      gl.uniform2f(programInfo.uniforms.containerSize, currentWidth, currentHeight);
+      gl.uniform1f(programInfo.uniforms.devicePixelRatio, currentDevicePixelRatio);
       gl.uniform4fv(programInfo.uniforms.lineColor, lineColor);
-      gl.uniform1f(
-        programInfo.uniforms.time,
-        reducedMotion.matches ? 0 : timestamp / 1000,
-      );
-      gl.uniform2f(
-        programInfo.uniforms.viewportSize,
-        window.innerWidth,
-        window.innerHeight,
-      );
+      gl.uniform1f(programInfo.uniforms.time, reducedMotion.matches ? 0 : timestamp / 1000);
+      gl.uniform2f(programInfo.uniforms.viewportSize, window.innerWidth, window.innerHeight);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -817,22 +769,13 @@ export function RetroGrid({
   const fallbackRotationStyles = {
     transform: `rotateX(${normalizedAngle}deg)`,
   } as CSSProperties;
-  const lightFallbackGridStyles = createFallbackGridStyle(
-    normalizedCellSize,
-    lightLineColor,
-  );
-  const darkFallbackGridStyles = createFallbackGridStyle(
-    normalizedCellSize,
-    darkLineColor,
-  );
+  const lightFallbackGridStyles = createFallbackGridStyle(normalizedCellSize, lightLineColor);
+  const darkFallbackGridStyles = createFallbackGridStyle(normalizedCellSize, darkLineColor);
 
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "pointer-events-none absolute size-full overflow-hidden",
-        className,
-      )}
+      className={cn("pointer-events-none absolute size-full overflow-hidden", className)}
       style={gridStyles}
       {...props}
     >
@@ -855,10 +798,7 @@ export function RetroGrid({
       ) : null}
       <canvas
         ref={canvasRef}
-        className={cn(
-          "absolute inset-0 size-full",
-          isWebGlReady ? "opacity-100" : "opacity-0",
-        )}
+        className={cn("absolute inset-0 size-full", isWebGlReady ? "opacity-100" : "opacity-0")}
       />
       <div className="absolute inset-0 bg-linear-to-t from-white to-transparent to-90% dark:from-black" />
     </div>

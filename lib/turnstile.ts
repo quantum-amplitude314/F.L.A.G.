@@ -21,9 +21,7 @@ export const verifyTurnstileToken = async (token: string) => {
     body: JSON.stringify({ secret: secretKey, response: token }),
     signal: AbortSignal.timeout(verifyTimeoutMs),
   });
-  const { success, "error-codes": errorCodes } = verifyResponseSchema.parse(
-    await response.json(),
-  );
+  const { success, "error-codes": errorCodes } = verifyResponseSchema.parse(await response.json());
   if (!success) console.error("[join-flag] turnstile rejected", errorCodes);
 
   return success;

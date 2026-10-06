@@ -5,11 +5,7 @@ const { name, email, message } = joinFlagCopy.fields;
 const { nameMin, nameMax, emailMax, messageMin, messageMax } = joinFlagLimits;
 
 export const joinFlagSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(nameMin, name.required)
-    .max(nameMax, name.tooLong),
+  name: z.string().trim().min(nameMin, name.required).max(nameMax, name.tooLong),
   email: z
     .string()
     .trim()
@@ -30,9 +26,7 @@ export type JoinFlagField = keyof JoinFlagRequest;
 
 export type JoinFlagValues = Record<JoinFlagField, string>;
 
-export type JoinFlagErrors = Partial<
-  Record<JoinFlagField | "verification", string>
->;
+export type JoinFlagErrors = Partial<Record<JoinFlagField | "verification", string | undefined>>;
 
 export type JoinFlagState =
   | { status: "idle" }
@@ -52,11 +46,7 @@ export const parseJoinFlag = (values: JoinFlagValues) => {
   }
 
   const {
-    fieldErrors: {
-      name: [nameError] = [],
-      email: [emailError] = [],
-      message: [messageError] = [],
-    },
+    fieldErrors: { name: [nameError] = [], email: [emailError] = [], message: [messageError] = [] },
   } = z.flattenError(error);
   const errors: JoinFlagErrors = {
     name: nameError,

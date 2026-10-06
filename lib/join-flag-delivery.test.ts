@@ -36,8 +36,6 @@ describe("deliverJoinFlagRequest", () => {
       error: { message: "Invalid API key", name: "validation_error" },
     });
 
-    await expect(deliverJoinFlagRequest(request)).rejects.toThrow(
-      "Invalid API key",
-    );
+    await expect(deliverJoinFlagRequest(request)).rejects.toThrow("Invalid API key");
   });
 });

@@ -7,9 +7,10 @@ Infra on Vercel.
 ## Develop
 
 ```zsh
+curl -fsSL https://bun.com/install | bash   # see https://bun.com/docs/installation
+bun add -g @biomejs/biome                   # or bun add -d @biomejs/biome
 bun install
 bun run dev        # http://localhost:3000
-bun run format     # biome format --write
 bun run lint-fix
 bun run typecheck
 bun run build

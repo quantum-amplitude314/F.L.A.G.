@@ -58,9 +58,7 @@ function SlideCaption({
 }) {
   return (
     <div className={className}>
-      <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-4xl">
-        {title}
-      </h2>
+      <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-4xl">{title}</h2>
       <p className="mt-2 text-base text-white/65">{detail}</p>
     </div>
   );
@@ -73,22 +71,24 @@ function SlideControls({
   onNext,
 }: {
   autoAdvance: boolean;
-  onToggle: () => void;
+  onToggle?: (() => void) | undefined;
   onPrevious: () => void;
   onNext: () => void;
 }) {
   return (
     <div className="flex shrink-0 gap-2">
-      <Button
-        variant="outline"
-        size="icon-lg"
-        onClick={onToggle}
-        aria-label={autoAdvance ? "Pause slideshow" : "Play slideshow"}
-        aria-pressed={autoAdvance}
-        className={controlButtonClassName}
-      >
-        {autoAdvance ? <Pause /> : <Play />}
-      </Button>
+      {onToggle ? (
+        <Button
+          variant="outline"
+          size="icon-lg"
+          onClick={onToggle}
+          aria-label={autoAdvance ? "Pause slideshow" : "Play slideshow"}
+          aria-pressed={autoAdvance}
+          className={controlButtonClassName}
+        >
+          {autoAdvance ? <Pause /> : <Play />}
+        </Button>
+      ) : null}
       <Button
         variant="outline"
         size="icon-lg"
@@ -116,15 +116,12 @@ export function MissionConsole() {
   const [autoAdvance, setAutoAdvance] = useState(false);
   const [sequenceStarted, setSequenceStarted] = useState(false);
   const playerRef = useRef<YouTubePlayer | null>(null);
-  const activeSlide = slides[index];
+  const activeSlide = slides[index] ?? slides[0];
 
   useEffect(() => {
     if (!autoAdvance) return;
     // Re-armed on every slide change so a manual pick gets the full dwell time.
-    const timeoutId = window.setTimeout(
-      () => setIndex((index + 1) % slides.length),
-      6500,
-    );
+    const timeoutId = window.setTimeout(() => setIndex((index + 1) % slides.length), 6500);
     return () => window.clearTimeout(timeoutId);
   }, [autoAdvance, index]);
 
@@ -191,7 +188,7 @@ export function MissionConsole() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, scale: 0.97 }}
                   transition={{ duration: 0.28 }}
-                  className="absolute inset-0 z-10 flex items-center justify-center p-5"
+                  className="absolute inset-x-0 top-0 z-10 flex justify-center p-5"
                 >
                   <Button
                     size="lg"
@@ -204,27 +201,21 @@ export function MissionConsole() {
                 </motion.div>
               ) : null}
             </AnimatePresence>
-            <div
-              hidden={!sequenceStarted}
-              className="absolute inset-x-0 bottom-0 hidden items-end justify-between gap-5 p-8 min-[900px]:flex"
-            >
+            <div className="absolute inset-x-0 bottom-0 hidden items-end justify-between gap-5 p-8 min-[900px]:flex">
               <SlideCaption slide={activeSlide} className="max-w-xl" />
               <SlideControls
                 autoAdvance={autoAdvance}
-                onToggle={toggleSequence}
+                onToggle={sequenceStarted ? toggleSequence : undefined}
                 onPrevious={() => select(index - 1)}
                 onNext={() => select(index + 1)}
               />
             </div>
           </div>
-          <div
-            hidden={!sequenceStarted}
-            className="flex flex-col gap-4 border-t border-border p-5 min-[900px]:hidden"
-          >
+          <div className="flex flex-col gap-4 border-t border-border p-5 min-[900px]:hidden">
             <SlideCaption slide={activeSlide} />
             <SlideControls
               autoAdvance={autoAdvance}
-              onToggle={toggleSequence}
+              onToggle={sequenceStarted ? toggleSequence : undefined}
               onPrevious={() => select(index - 1)}
               onNext={() => select(index + 1)}
             />
@@ -261,9 +252,7 @@ export function MissionConsole() {
                     )}
                   />
                 </span>
-                <span className="line-clamp-2 text-sm leading-5 font-medium">
-                  {slide.title}
-                </span>
+                <span className="line-clamp-2 text-sm leading-5 font-medium">{slide.title}</span>
               </button>
             ))}
           </nav>

@@ -9,10 +9,7 @@ const deliveryTimeoutMs = 5_000;
 const sendWithTimeout = async <T>(send: Promise<T>) => {
   let timer: ReturnType<typeof setTimeout> | undefined;
   const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(
-      () => reject(new Error("Resend did not answer in time")),
-      deliveryTimeoutMs,
-    );
+    timer = setTimeout(() => reject(new Error("Resend did not answer in time")), deliveryTimeoutMs);
   });
 
   try {
@@ -22,16 +19,8 @@ const sendWithTimeout = async <T>(send: Promise<T>) => {
   }
 };
 
-export const deliverJoinFlagRequest = async ({
-  name,
-  email,
-  message,
-}: JoinFlagRequest) => {
-  const {
-    RESEND_API_KEY: apiKey,
-    JOIN_FLAG_RECIPIENT: recipient,
-    JOIN_FLAG_SENDER: sender,
-  } = env;
+export const deliverJoinFlagRequest = async ({ name, email, message }: JoinFlagRequest) => {
+  const { RESEND_API_KEY: apiKey, JOIN_FLAG_RECIPIENT: recipient, JOIN_FLAG_SENDER: sender } = env;
   const resend = new Resend(apiKey);
   const { error } = await sendWithTimeout(
     resend.emails.send({

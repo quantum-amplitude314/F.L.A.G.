@@ -24,14 +24,9 @@ export function Navigation() {
       (entries) => {
         const activeEntry = entries
           .filter(({ isIntersecting }) => isIntersecting)
-          .toSorted(
-            (first, second) =>
-              second.intersectionRatio - first.intersectionRatio,
-          )[0];
+          .toSorted((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
 
-        setActiveSection(
-          activeEntry ? (activeEntry.target.id as SectionId) : null,
-        );
+        setActiveSection(activeEntry ? (activeEntry.target.id as SectionId) : null);
       },
       { rootMargin: "-28% 0px -67% 0px", threshold: 0 },
     );

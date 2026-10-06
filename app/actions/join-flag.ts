@@ -1,10 +1,6 @@
 "use server";
 
-import {
-  type JoinFlagState,
-  type JoinFlagValues,
-  parseJoinFlag,
-} from "@/lib/join-flag";
+import { type JoinFlagState, type JoinFlagValues, parseJoinFlag } from "@/lib/join-flag";
 import { joinFlagCopy } from "@/lib/join-flag-copy";
 import { deliverJoinFlagRequest } from "@/lib/join-flag-delivery";
 import { turnstileTokenSchema, verifyTurnstileToken } from "@/lib/turnstile";
@@ -39,13 +35,11 @@ export const submitJoinFlag = async ({
   const parsedToken = turnstileTokenSchema.safeParse(token);
   if (!parsedToken.success) return verificationRequired;
 
-  const verified = await verifyTurnstileToken(parsedToken.data).catch(
-    (error) => {
-      console.error("[join-flag] verification failed", error);
+  const verified = await verifyTurnstileToken(parsedToken.data).catch((error) => {
+    console.error("[join-flag] verification failed", error);
 
-      return false;
-    },
-  );
+    return false;
+  });
   if (!verified) return verificationFailed;
 
   try {

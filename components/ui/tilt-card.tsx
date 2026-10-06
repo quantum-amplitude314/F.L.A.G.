@@ -1,16 +1,7 @@
 "use client";
 
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-} from "motion/react";
-import {
-  type ReactNode,
-  type PointerEvent as ReactPointerEvent,
-  useRef,
-} from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { type ReactNode, type PointerEvent as ReactPointerEvent, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 const spring = { damping: 22, mass: 0.7, stiffness: 180 };
@@ -22,11 +13,7 @@ interface TiltCardProps {
   className?: string;
 }
 
-export function TiltCard({
-  ariaLabelledby,
-  children,
-  className,
-}: TiltCardProps) {
+export function TiltCard({ ariaLabelledby, children, className }: TiltCardProps) {
   const boundsRef = useRef<DOMRect | null>(null);
   const reducedMotion = useReducedMotion();
   const rotateXSource = useMotionValue(0);
@@ -49,8 +36,7 @@ export function TiltCard({
   const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
     if (event.pointerType !== "mouse" || reducedMotion) return;
 
-    const bounds =
-      boundsRef.current ?? event.currentTarget.getBoundingClientRect();
+    const bounds = boundsRef.current ?? event.currentTarget.getBoundingClientRect();
     const horizontalPosition = (event.clientX - bounds.left) / bounds.width;
     const verticalPosition = (event.clientY - bounds.top) / bounds.height;
 

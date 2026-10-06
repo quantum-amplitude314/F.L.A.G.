@@ -1,12 +1,7 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { MissionConsole } from "@/components/mission-console";
 import { Button } from "@/components/ui/button";
@@ -31,11 +26,7 @@ export function Hero() {
 
   return (
     <>
-      <section
-        id="hero"
-        ref={sceneRef}
-        className="relative scroll-mt-20 border-b border-border"
-      >
+      <section id="hero" ref={sceneRef} className="relative scroll-mt-20 border-b border-border">
         <div className="relative flex min-h-[max(46rem,100svh)] items-center overflow-hidden">
           <motion.div
             className="absolute -inset-[8%]"
@@ -72,9 +63,7 @@ export function Hero() {
               </p>
               <h1 className="mt-6 text-[clamp(2.5rem,10.45vw,3.35rem)] leading-[0.92] font-semibold text-white sm:text-[clamp(3.35rem,5.5vw,5.75rem)] lg:tracking-[-0.15rem]">
                 A{" "}
-                <span
-                  className={`${highlightClassName} ${magentaHighlightClassName}`}
-                >
+                <span className={`${highlightClassName} ${magentaHighlightClassName}`}>
                   shadowy&nbsp;flight
                 </span>{" "}
                 into the

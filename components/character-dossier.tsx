@@ -26,18 +26,8 @@ interface CharacterDossierProps {
 }
 
 export function CharacterDossier({ profile }: CharacterDossierProps) {
-  const {
-    id,
-    name,
-    role,
-    statement,
-    biography,
-    avatar,
-    avatarAlt,
-    poster,
-    posterAlt,
-    traits,
-  } = profile;
+  const { id, name, role, statement, biography, avatar, avatarAlt, poster, posterAlt, traits } =
+    profile;
 
   const nameId = `${id}-name`;
 
@@ -49,13 +39,7 @@ export function CharacterDossier({ profile }: CharacterDossierProps) {
       <div className="grid sm:grid-cols-[minmax(0,1fr)_minmax(0,260px)]">
         <div className="flex flex-col px-5 pt-[1.125rem] pb-2.5">
           <div className="relative z-10 -mt-16 size-20 overflow-hidden rounded-full border border-primary/40 bg-muted shadow-[0_0_30px_-9px_var(--primary)] sm:mt-0 2xl:size-24">
-            <Image
-              src={avatar}
-              alt={avatarAlt}
-              fill
-              sizes="96px"
-              className="object-cover"
-            />
+            <Image src={avatar} alt={avatarAlt} fill sizes="96px" className="object-cover" />
           </div>
           <h3
             id={nameId}
@@ -70,12 +54,10 @@ export function CharacterDossier({ profile }: CharacterDossierProps) {
           <p className="text-base leading-6 font-semibold uppercase tracking-[0.06em] text-primary 2xl:text-lg 2xl:leading-7">
             {statement}
           </p>
-          <p className="mt-5 text-[0.95rem] leading-7 text-muted-foreground">
-            {biography}
-          </p>
+          <p className="mt-5 text-[0.95rem] leading-7 text-muted-foreground">{biography}</p>
         </div>
 
-        <figure className="relative order-first aspect-[4/5] w-full overflow-hidden sm:order-none sm:aspect-auto sm:max-w-[260px] sm:justify-self-end sm:self-stretch sm:rounded-bl-[1.75rem]">
+        <figure className="relative order-first aspect-[4/5] w-full overflow-hidden sm:order-none sm:max-w-[260px] sm:justify-self-end sm:self-start sm:rounded-bl-[1.75rem]">
           <Image
             src={poster}
             alt={posterAlt}
@@ -95,9 +77,7 @@ export function CharacterDossier({ profile }: CharacterDossierProps) {
             </span>
             <div className="min-w-0">
               <dt className="text-sm font-semibold">{label}</dt>
-              <dd className="text-xs leading-5 text-muted-foreground">
-                {detail}
-              </dd>
+              <dd className="text-xs leading-5 text-muted-foreground">{detail}</dd>
             </div>
           </div>
         ))}
