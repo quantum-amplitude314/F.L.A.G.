@@ -1,12 +1,13 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play, Volume2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ThemePlayer, type YouTubePlayer } from "@/components/theme-player";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 const slides = [
@@ -66,17 +67,37 @@ function SlideCaption({
 
 function SlideControls({
   autoAdvance,
+  volume,
   onToggle,
+  onVolumeChange,
   onPrevious,
   onNext,
 }: {
   autoAdvance: boolean;
+  volume: number;
   onToggle?: (() => void) | undefined;
+  onVolumeChange: (volume: number) => void;
   onPrevious: () => void;
   onNext: () => void;
 }) {
   return (
     <div className="flex shrink-0 gap-2">
+      {onToggle ? (
+        <div className="flex h-9 items-center gap-2 rounded-full border border-input bg-input/30 px-3 text-white backdrop-blur">
+          <Volume2 aria-hidden="true" className="size-4 shrink-0" />
+          <div className="w-20">
+            <Slider
+              value={[volume]}
+              step={5}
+              thumbLabel="Theme volume"
+              onValueChange={(nextValue) => {
+                const [nextVolume] = [nextValue].flat();
+                if (nextVolume !== undefined) onVolumeChange(nextVolume);
+              }}
+            />
+          </div>
+        </div>
+      ) : null}
       {onToggle ? (
         <Button
           variant="outline"
@@ -115,7 +136,11 @@ export function MissionConsole() {
   const [index, setIndex] = useState(0);
   const [autoAdvance, setAutoAdvance] = useState(false);
   const [sequenceStarted, setSequenceStarted] = useState(false);
+  const [playerRequested, setPlayerRequested] = useState(false);
   const playerRef = useRef<YouTubePlayer | null>(null);
+  const playWhenReadyRef = useRef(false);
+  const [volume, setVolume] = useState(60);
+  const volumeRef = useRef(volume);
   const activeSlide = slides[index] ?? slides[0];
 
   useEffect(() => {
@@ -129,13 +154,26 @@ export function MissionConsole() {
     setIndex((nextIndex + slides.length) % slides.length);
   };
 
+  const playTheme = () => {
+    playWhenReadyRef.current = true;
+    setPlayerRequested(true);
+  };
+
   const startSequence = () => {
+    playTheme();
     setSequenceStarted(true);
     setAutoAdvance(true);
     playerRef.current?.playVideo();
   };
 
+  const changeVolume = (nextVolume: number) => {
+    volumeRef.current = nextVolume;
+    setVolume(nextVolume);
+    playerRef.current?.setVolume(nextVolume);
+  };
+
   const toggleSequence = () => {
+    playWhenReadyRef.current = !autoAdvance;
     if (autoAdvance) {
       playerRef.current?.pauseVideo();
     } else {
@@ -205,7 +243,9 @@ export function MissionConsole() {
               <SlideCaption slide={activeSlide} className="max-w-xl" />
               <SlideControls
                 autoAdvance={autoAdvance}
+                volume={volume}
                 onToggle={sequenceStarted ? toggleSequence : undefined}
+                onVolumeChange={changeVolume}
                 onPrevious={() => select(index - 1)}
                 onNext={() => select(index + 1)}
               />
@@ -215,7 +255,9 @@ export function MissionConsole() {
             <SlideCaption slide={activeSlide} />
             <SlideControls
               autoAdvance={autoAdvance}
+              volume={volume}
               onToggle={sequenceStarted ? toggleSequence : undefined}
+              onVolumeChange={changeVolume}
               onPrevious={() => select(index - 1)}
               onNext={() => select(index + 1)}
             />
@@ -257,9 +299,13 @@ export function MissionConsole() {
             ))}
           </nav>
 
-          <div className="border-t border-border min-[900px]:mt-auto">
-            <ThemePlayer playerRef={playerRef} />
-          </div>
+          <ThemePlayer
+            playerRef={playerRef}
+            active={playerRequested}
+            playWhenReadyRef={playWhenReadyRef}
+            volumeRef={volumeRef}
+            onPlay={playTheme}
+          />
         </aside>
       </div>
     </section>
