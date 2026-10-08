@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import * as m from "motion/react-m";
 import { type ReactNode, type PointerEvent as ReactPointerEvent, useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +46,7 @@ export function TiltCard({ ariaLabelledby, children, className }: TiltCardProps)
   };
 
   return (
-    <motion.article
+    <m.article
       aria-labelledby={ariaLabelledby}
       onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
@@ -60,6 +61,6 @@ export function TiltCard({ ariaLabelledby, children, className }: TiltCardProps)
       className={cn("transform-gpu will-change-transform", className)}
     >
       {children}
-    </motion.article>
+    </m.article>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useReducedMotion, useScroll, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 import { useRef } from "react";
 import { MissionConsole } from "@/components/mission-console";
 import { Button } from "@/components/ui/button";
@@ -28,10 +29,7 @@ export function Hero() {
     <>
       <section id="hero" ref={sceneRef} className="relative scroll-mt-20 border-b border-border">
         <div className="relative flex min-h-[max(46rem,100svh)] items-center overflow-hidden">
-          <motion.div
-            className="absolute -inset-[8%]"
-            style={{ y: reducedMotion ? 0 : backgroundY }}
-          >
+          <m.div className="absolute -inset-[8%]" style={{ y: reducedMotion ? 0 : backgroundY }}>
             <img
               src="/hero.avif"
               srcSet="/hero-sm.avif 1280w, /hero.avif 2560w"
@@ -40,9 +38,9 @@ export function Hero() {
               fetchPriority="high"
               className="absolute inset-0 size-full object-cover object-[58%_center]"
             />
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             aria-hidden
             className="absolute -inset-[10%] mix-blend-screen"
             style={{

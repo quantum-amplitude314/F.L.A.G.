@@ -1,7 +1,8 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Pause, Play, Volume2 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ThemePlayer, type YouTubePlayer } from "@/components/theme-player";
@@ -200,7 +201,7 @@ export function MissionConsole() {
         <div className="min-w-0 min-[900px]:border-r min-[900px]:border-border">
           <div className="relative aspect-video overflow-hidden bg-black">
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
+              <m.div
                 key={activeSlide.src}
                 initial={{ opacity: 0, scale: 1.025, filter: "blur(8px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -212,16 +213,17 @@ export function MissionConsole() {
                   src={activeSlide.src}
                   srcSet={`${activeSlide.srcSm} 768w, ${activeSlide.src} ${activeSlide.width}w`}
                   sizes="(min-width: 1280px) 940px, (min-width: 900px) 70vw, 100vw"
+                  loading="lazy"
                   alt={activeSlide.alt}
                   className="absolute inset-0 size-full object-cover"
                 />
-              </motion.div>
+              </m.div>
             </AnimatePresence>
 
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(3,3,12,0.92),transparent_50%)]" />
             <AnimatePresence>
               {!sequenceStarted ? (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, scale: 0.97 }}
@@ -236,7 +238,7 @@ export function MissionConsole() {
                     <Play className="fill-current" />
                     Start pursuit sequence
                   </Button>
-                </motion.div>
+                </m.div>
               ) : null}
             </AnimatePresence>
             <div className="absolute inset-x-0 bottom-0 hidden items-end justify-between gap-5 p-8 min-[900px]:flex">
