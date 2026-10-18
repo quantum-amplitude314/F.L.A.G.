@@ -18,7 +18,9 @@ export const metadata: Metadata = {
   title: "F.L.A.G.",
   description:
     "A shadowy flight into the dangerous world of a man who does not exist — a fan-made concept page.",
-  openGraph: { images: [{ url: "/og.webp", width: 1200, height: 630 }] },
+  openGraph: {
+    images: [{ url: "/og-image-v1.jpg", type: "image/jpeg", width: 1200, height: 630 }],
+  },
   twitter: { card: "summary_large_image" },
 };
 
